@@ -274,6 +274,13 @@
       "short": "By",
       "teacher": "Linda Bylund",
       "contract": false
+    },
+    {
+      "id": 40,
+      "name": "Powerloop UF",
+      "short": "",
+      "teacher": "Linda Bylund",
+      "contract": false
     }
   ],
   "bookings": [
