@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Bokning IdéVerket</title>
+<style>
+:root{--brown:#5a3217;--brown2:#7b4a26;--cream:#fbf5ea;--cream2:#f3e7d5;--ink:#25201b;--muted:#71675e;--line:#e6d9c9;--white:#fff;--green:#237653;--red:#b83a3a;--amber:#a96615;--shadow:0 12px 34px rgba(74,45,23,.09)}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;background:#faf8f4;color:var(--ink)}
+button,input,select{font:inherit}
+.top{background:linear-gradient(135deg,#fffaf1,#f1dfc6);border-bottom:1px solid #dccab4;padding:13px clamp(16px,4vw,55px)}
+.toprow{max-width:1400px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand{display:flex;align-items:center;gap:18px}
+.brand img{width:145px;height:82px;object-fit:contain}
+.brand h1{margin:0;color:var(--brown);font-size:clamp(24px,3vw,38px)}
+.brand p{margin:4px 0;color:var(--muted)}
+.topright{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.codebox{background:white;border:1px solid #d7c4a9;border-radius:15px;padding:9px 13px;box-shadow:var(--shadow)}
+.codebox label{display:block;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.codebox input{width:150px;border:0;padding:4px 0 1px;color:var(--brown);font-size:23px;font-weight:900;outline:0;background:transparent}
+.authbox{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.authbox .who{font-size:12px;color:var(--muted);font-weight:700}
+.nav{display:flex;gap:7px;padding:0 clamp(16px,4vw,55px);background:white;border-bottom:1px solid var(--line);overflow:auto}
+.nav button{border:0;background:none;padding:15px 14px;border-bottom:3px solid transparent;color:var(--muted);font-weight:750;white-space:nowrap;cursor:pointer}
+.nav button.active{color:var(--brown);border-color:var(--brown2)}
+main{max-width:1400px;margin:auto;padding:26px clamp(16px,4vw,48px) 60px}
+.view{display:none}.view.active{display:block}
+.grid{display:grid;gap:18px}
+.kpis{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:22px}
+.card{background:white;border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow)}
+.kpi small{color:var(--muted);font-weight:700}
+.kpi strong{display:block;font-size:30px;color:var(--brown);margin-top:5px}
+.sectionhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:4px 0 14px}
+.sectionhead h2{margin:0}
+.badge{display:inline-flex;align-items:center;padding:4px 9px;border-radius:999px;background:var(--cream2);color:var(--brown);font-size:12px;font-weight:800}
+.status{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:800}
+.status.ok{background:#e7f5ee;color:var(--green)}
+.status.no{background:#fbeaea;color:var(--red)}
+.weekcards{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;align-items:stretch}
+.weekcards .weekcard{min-width:0;overflow:hidden}
+.weekcards .weekcard:nth-child(1){grid-column:1;grid-row:1 / span 2}
+.weekcards .weekcard:nth-child(2){grid-column:2;grid-row:1 / span 2}
+.weekcards .weekcard:nth-child(3){grid-column:3;grid-row:1}
+.weekcards .weekcard:nth-child(4){grid-column:3;grid-row:2}
+.weekcard h3{margin:0 0 12px}
+.weekcards .weekcard:nth-child(n+3){padding:13px}
+.weekcards .weekcard:nth-child(n+3) h3{font-size:14px;margin-bottom:5px}
+.weekcards .weekcard:nth-child(n+3) .slot{grid-template-columns:24px minmax(0,1fr) auto;gap:6px;padding:4px 0;font-size:11px;line-height:1.15}
+.weekcards .weekcard:nth-child(n+3) .slotnum{width:21px;height:21px;border-radius:6px;font-size:10px}
+.weekcards .weekcard:nth-child(n+3) .muted{font-size:10px}
+.weekcards .weekcard:nth-child(n+3) .status{padding:2px 5px;font-size:9px;white-space:nowrap}
+.slot{display:grid;grid-template-columns:38px 1fr auto;gap:11px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.slotnum{width:30px;height:30px;border-radius:9px;background:var(--cream2);display:grid;place-items:center;font-weight:800;color:var(--brown)}
+.muted{color:var(--muted)}
+.calendar{overflow:auto}
+.weekrow{display:grid;grid-template-columns:80px repeat(4,minmax(190px,1fr));gap:8px;min-width:900px;margin-bottom:8px}
+.weeklabel{font-weight:800;padding:13px 8px}
+.booking{border:1px solid var(--line);background:white;border-radius:12px;padding:10px;min-height:78px}
+body.canedit .booking{cursor:pointer}
+body.canedit .booking:hover{border-color:var(--brown2);box-shadow:0 5px 15px #5a321712}
+.booking.empty{display:grid;place-items:center;color:var(--muted);border-style:dashed}
+.booking .name{font-weight:800}
+.booking .teacher{font-size:12px;color:var(--muted);margin-top:3px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;background:var(--brown);color:white}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.55;cursor:default;filter:none}
+.btn.secondary{background:white;color:var(--brown);border:1px solid var(--line)}
+.btn.danger{background:var(--red)}
+.btn.small{padding:7px 10px;font-size:13px}
+.search,.field input,.field select{min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:white}
+.tablewrap{overflow:auto;background:white;border:1px solid var(--line);border-radius:15px}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{background:#fcf8f2;font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+.count{font-weight:900;color:var(--brown)}
+.contractcheck{width:20px;height:20px;accent-color:var(--green);vertical-align:middle;margin-right:8px}
+.fairgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fairtop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.fairtop h3{margin:0}
+.fairlist{list-style:none;padding:0;margin:15px 0 0}
+.fairlist li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.setting{display:grid;grid-template-columns:220px 1fr;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.setting:last-child{border-bottom:0}
+dialog{border:0;border-radius:18px;padding:0;box-shadow:0 25px 80px #0005;width:min(540px,calc(100% - 28px))}
+dialog::backdrop{background:#37231388}
+.modal{padding:23px}
+.modal h2{margin-top:0;color:var(--brown)}
+.field{display:grid;gap:6px;margin:13px 0}
+.field input,.field select{width:100%}
+.field .help{font-size:12px;color:var(--muted)}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+.notice{max-width:1400px;margin:10px auto 0;padding:10px 14px;border-radius:10px;font-weight:700}
+.notice.warn{background:#fff2d9;color:#784b10}
+.notice.error{background:#fbeaea;color:var(--red)}
+.notice.info{background:#e7f5ee;color:var(--green)}
+.formerror{color:var(--red);font-weight:700;min-height:1.3em;margin-top:8px}
+.hidden{display:none!important}
+.emptymsg{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}
+.editonly{display:none}
+body.canedit .editonly{display:revert}
+body.canedit .toolbar.editonly{display:flex}
+#saveStatus{position:fixed;right:18px;bottom:18px;padding:10px 14px;border-radius:12px;background:#25201b;color:white;font-weight:800;font-size:13px;box-shadow:0 10px 30px #0004;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none;z-index:50;max-width:min(420px,calc(100% - 36px))}
+#saveStatus.show{opacity:1;transform:none}
+#saveStatus.error{background:var(--red)}
+#saveStatus.ok{background:var(--green)}
+code{background:var(--cream2);padding:2px 5px;border-radius:5px;font-size:13px}
+@media(max-width:850px){.kpis,.fairgrid{grid-template-columns:1fr 1fr}.weekcards{grid-template-columns:1fr 1fr;grid-template-rows:auto}.weekcards .weekcard:nth-child(1),.weekcards .weekcard:nth-child(2),.weekcards .weekcard:nth-child(3),.weekcards .weekcard:nth-child(4){grid-column:auto;grid-row:auto}.weekcards .weekcard:nth-child(n+3){padding:20px}.weekcards .weekcard:nth-child(n+3) h3{font-size:inherit;margin-bottom:12px}.weekcards .weekcard:nth-child(n+3) .slot{grid-template-columns:38px 1fr auto;gap:11px;padding:11px 0;font-size:inherit;line-height:inherit}.weekcards .weekcard:nth-child(n+3) .slotnum{width:30px;height:30px;border-radius:9px;font-size:inherit}.weekcards .weekcard:nth-child(n+3) .muted{font-size:inherit}.weekcards .weekcard:nth-child(n+3) .status{padding:4px 8px;font-size:12px}.setting{grid-template-columns:1fr}}
+@media(max-width:620px){.toprow,.brand{align-items:flex-start}.toprow{flex-direction:column}.topright{justify-content:flex-start;width:100%}.authbox{align-items:flex-start}.brand img{width:105px;height:65px}.codebox{width:100%}.kpis,.weekcards,.fairgrid{grid-template-columns:1fr}.weekcards{grid-template-rows:auto}.sectionhead{align-items:flex-start;flex-direction:column}}
+@media print{.top,.nav,.toolbar,.btn,#saveStatus,.notice{display:none!important}main{padding:0}.view{display:none!important}.view.active{display:block!important}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="toprow">
+  <div class="brand"><img src="logo.webp" alt="IdéVerket"><div><h1>Bokning IdéVerket</h1><p>Bokning, avtal och mässtillfällen</p></div></div>
+  <div class="topright">
+    <div class="codebox"><label for="codeInput">Aktuell butikskod</label><input id="codeInput" type="text" inputmode="numeric" aria-label="Aktuell butikskod" readonly></div>
+    <div class="authbox"><span class="who" id="authWho">Visningsläge</span><button id="authBtn" class="btn secondary small">Logga in för att redigera</button></div>
+  </div>
+</div></header>
+<div id="notice" class="notice hidden"></div>
+<nav class="nav">
+  <button data-view="dashboard" class="active">Översikt</button>
+  <button data-view="bookings">Bokningsschema</button>
+  <button data-view="companies">UF-företag</button>
+  <button data-view="fairs">Mässtillfällen</button>
+  <button data-view="settings">Inställningar</button>
+</nav>
+<main>
+<section id="dashboard" class="view active">
+  <div class="grid kpis" id="kpis"></div>
+  <div class="sectionhead"><h2>Aktuellt och kommande</h2><span class="badge" id="todayLabel"></span></div>
+  <div class="grid weekcards" id="weekCards"></div>
+</section>
+<section id="bookings" class="view">
+  <div class="sectionhead"><div><h2>Bokningsschema</h2><div class="muted" id="bookingsHint">Klicka på en plats för att boka eller ändra företag</div></div>
+  <div class="toolbar"><select id="weekFilter" class="search"></select><button class="btn secondary" onclick="window.print()">Skriv ut</button></div></div>
+  <div class="calendar" id="calendar"></div>
+</section>
+<section id="companies" class="view">
+  <div class="sectionhead"><div><h2>UF-företag</h2><div class="muted">Hantera företag, ansvarig lärare och godkänt avtal</div></div>
+  <div class="toolbar"><input id="companySearch" class="search" placeholder="Sök företag eller lärare"><button id="addCompanyBtn" class="btn editonly">+ Lägg till företag</button></div></div>
+  <div class="tablewrap"><table><thead><tr><th>Nr</th><th>UF-företag</th><th>Ansvarig lärare</th><th>Tillfällen</th><th class="editonly"></th></tr></thead><tbody id="companyRows"></tbody></table></div>
+</section>
+<section id="fairs" class="view">
+  <div class="sectionhead"><div><h2>Mässtillfällen</h2><div class="muted">Skapa mässtillfällen och lägg till deltagande företag</div></div><button id="addFairBtn" class="btn editonly">+ Nytt mässtillfälle</button></div>
+  <div id="fairGrid" class="grid fairgrid"></div>
+</section>
+<section id="settings" class="view">
+  <div class="sectionhead"><h2>Inställningar och data</h2></div>
+  <div class="card">
+    <div class="setting"><div><strong>Lagring</strong><div class="muted">All data sparas i filen <code>data.json</code> i GitHub-repot och delas av alla som öppnar sidan. Varje ändring blir en commit, så historiken finns kvar.</div></div>
+      <div><div id="storageInfo" class="muted" style="margin-bottom:8px"></div><div class="toolbar"><button id="refreshBtn" class="btn secondary">Hämta senaste</button><a id="repoLink" class="btn secondary" target="_blank" rel="noopener">Öppna repot</a></div></div></div>
+    <div class="setting"><div><strong>Redigeringslösenord</strong><div class="muted">Den som har GitHub-token för repot sätter ett lösenord här. Dela lösenordet med dem som ska kunna ändra i bokningen.</div></div>
+      <div><div id="authInfo" class="muted" style="margin-bottom:8px"></div><div class="toolbar"><button id="setPasswordBtn" class="btn secondary">Sätt eller byt lösenord</button><button id="logoutBtn" class="btn secondary hidden">Logga ut</button></div></div></div>
+    <div class="setting"><div><strong>Säkerhetskopia</strong><div class="muted">Exportera eller importera programmets data. Import ersätter allt och kräver inloggning.</div></div>
+      <div class="toolbar"><button id="exportBtn" class="btn secondary">Exportera data</button><label class="btn secondary editonly">Importera data<input id="importFile" type="file" accept="application/json" hidden></label></div></div>
+    <div class="setting editonly"><div><strong>Återställ</strong><div class="muted">Återgå till innehållet från Excel-filen.</div></div><button id="resetBtn" class="btn danger">Återställ allt</button></div>
+  </div>
+</section>
+</main>
+<div id="saveStatus" role="status"></div>
+
+<dialog id="bookingDialog"><div class="modal"><h2 id="bookingTitle"></h2>
+  <div class="field"><label for="bookingCompany">UF-företag</label><select id="bookingCompany"></select></div>
+  <label><input id="bookingContract" class="contractcheck" type="checkbox"> Godkänt avtal för denna vecka</label>
+  <div class="row"><button class="btn secondary" data-close="bookingDialog">Avbryt</button><button id="deleteBooking" class="btn danger">Ta bort</button><button id="saveBooking" class="btn">Spara</button></div></div></dialog>
+<dialog id="companyDialog"><div class="modal"><h2 id="companyTitle">Lägg till företag</h2>
+  <div class="field"><label for="companyName">Företagsnamn</label><input id="companyName"></div>
+  <div class="field"><label for="companyTeacher">Ansvarig lärare</label><input id="companyTeacher"></div>
+  <div class="row"><button class="btn secondary" data-close="companyDialog">Avbryt</button><button id="saveCompany" class="btn">Spara</button></div></div></dialog>
+<dialog id="fairDialog"><div class="modal"><h2>Nytt mässtillfälle</h2>
+  <div class="field"><label for="fairTitle">Namn och datum</label><input id="fairTitle" placeholder="Exempel: Julmarknad 29/11"></div>
+  <div class="row"><button class="btn secondary" data-close="fairDialog">Avbryt</button><button id="saveFair" class="btn">Skapa</button></div></div></dialog>
+<dialog id="fairCompanyDialog"><div class="modal"><h2 id="fairCompanyTitle">Lägg till företag</h2>
+  <div class="field"><label for="fairCompanySelect">UF-företag</label><select id="fairCompanySelect"></select></div>
+  <div class="row"><button class="btn secondary" data-close="fairCompanyDialog">Avbryt</button><button id="saveFairCompany" class="btn">Lägg till</button></div></div></dialog>
+<dialog id="confirmDialog"><div class="modal"><h2 id="confirmTitle">Bekräfta</h2><p id="confirmText"></p>
+  <div class="row"><button id="confirmCancel" class="btn secondary">Avbryt</button><button id="confirmOk" class="btn danger">Ta bort</button></div></div></dialog>
+
+<dialog id="loginDialog"><div class="modal"><h2>Logga in för att redigera</h2>
+  <p id="loginIntro" class="muted"></p>
+  <form id="loginForm">
+    <div class="field"><label for="loginSecret" id="loginSecretLabel">Redigeringslösenord</label><input id="loginSecret" type="password" autocomplete="current-password"></div>
+    <label><input id="loginRemember" class="contractcheck" type="checkbox"> Kom ihåg mig på den här enheten</label>
+    <div class="formerror" id="loginError"></div>
+    <div class="row"><button type="button" class="btn secondary" data-close="loginDialog">Avbryt</button><button type="submit" id="loginSubmit" class="btn">Logga in</button></div>
+  </form></div></dialog>
+<dialog id="passwordDialog"><div class="modal"><h2>Sätt eller byt redigeringslösenord</h2>
+  <p class="muted">Lösenordet låser upp en GitHub-token som ger rätt att skriva till repot. Token krypteras med lösenordet och sparas som <code>auth.json</code> i repot. Använd en lång fras, minst 12 tecken, eftersom filen är publik.</p>
+  <form id="passwordForm">
+    <div class="field"><label for="pwToken">GitHub-token (finkornig, Contents: läs och skriv för detta repo)</label><input id="pwToken" type="password" autocomplete="off" placeholder="github_pat_…"></div>
+    <div class="field"><label for="pwNew">Nytt redigeringslösenord</label><input id="pwNew" type="password" autocomplete="new-password"></div>
+    <div class="field"><label for="pwRepeat">Upprepa lösenordet</label><input id="pwRepeat" type="password" autocomplete="new-password"></div>
+    <div class="formerror" id="pwError"></div>
+    <div class="row"><button type="button" class="btn secondary" data-close="passwordDialog">Avbryt</button><button type="submit" id="pwSubmit" class="btn">Spara lösenord</button></div>
+  </form></div></dialog>
+
+<script>
+'use strict';
+// ---------- Konfiguration ----------
+const CONFIG = {
+  owner: 'fjellandermedia',
+  repo: 'ideverket',
+  branch: 'main',
+  dataPath: 'data.json',
+  authPath: 'auth.json',
+  pollSeconds: 60
+};
+const API = 'https://api.github.com';
+const RAW = `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/${CONFIG.branch}/`;
+const TOKEN_KEY = 'ideverket.editToken';
+
+// Ursprungsdata från Excel-filen. Används som reservkopia om repot inte kan nås och vid "Återställ allt".
+const ORIGINAL = {"version":2,"storeCode":"1965","companies":[{"id":1,"name":"PlaceIt UF","short":"Bem","teacher":"Martin Berggren","contract":false},{"id":2,"name":"ScentCase UF","short":"Bnm","teacher":"Martina Benne","contract":true},{"id":3,"name":"Din Röst UF","short":"Bem","teacher":"Martin Berggren","contract":false},{"id":4,"name":"HomeDesign UF","short":"Bem","teacher":"Martin Berggren","contract":false},{"id":5,"name":"Tillsammans UF","short":"Bem","teacher":"Martin Berggren","contract":false},{"id":6,"name":"Resellio UF","short":"Ddf","teacher":"Frida Diener Dahlstrand","contract":false},{"id":7,"name":"Whristy UF","short":"Bnm","teacher":"Martina Benne","contract":false},{"id":8,"name":"GameOn UF","short":"Ddf","teacher":"Frida Diener Dahlstrand","contract":false},{"id":9,"name":"Néhlia UF","short":"Ddf","teacher":"Frida Diener Dahlstrand","contract":false},{"id":10,"name":"Språkverkstaden UF","short":"By","teacher":"Linda Bylund","contract":false},{"id":11,"name":"GearDry UF","short":"Fkr","teacher":"Kristina Farwing","contract":false},{"id":12,"name":"Gråzon UF","short":"Fkr","teacher":"Kristina Farwing","contract":false},{"id":13,"name":"HeatHold UF","short":"Fkr","teacher":"Kristina Farwing","contract":false},{"id":14,"name":"Riflesso UF","short":"Fkr","teacher":"Kristina Farwing","contract":false},{"id":15,"name":"Keyity UF","short":"Bnm","teacher":"Martina Benne","contract":false},{"id":16,"name":"Strålagrönt UF","short":"By","teacher":"Linda Bylund","contract":false},{"id":17,"name":"Träform UF","short":"By","teacher":"Linda Bylund","contract":false},{"id":18,"name":"Clean Buds UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":19,"name":"Eliora UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":20,"name":"Findify UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":21,"name":"Griply UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":22,"name":"KMA UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":23,"name":"Nortivo UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":24,"name":"Pop-up UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":25,"name":"Smålandskampen UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":26,"name":"TrackPro UF","short":"Sha","teacher":"Abanob Shemon","contract":false},{"id":27,"name":"Diodia UF","short":"Sha","teacher":"Abanob Shemon","contract":false},{"id":28,"name":"Saveur UF","short":"Sha","teacher":"Abanob Shemon","contract":false},{"id":29,"name":"Almora UF","short":"Ddf","teacher":"Frida Diener Dahlstrand","contract":false},{"id":30,"name":"Candlelit UF","short":"Ddf","teacher":"Frida Diener Dahlstrand","contract":false},{"id":31,"name":"SetWiew UF","short":"Ddf","teacher":"Frida Diener Dahlstrand","contract":false},{"id":32,"name":"Säg Det UF","short":"Fkr","teacher":"Kristina Farwing","contract":false},{"id":33,"name":"Trasslo UF","short":"Bem","teacher":"Martin Berggren","contract":false},{"id":34,"name":"CleanDrive UF","short":"Bem","teacher":"Martin Berggren","contract":false},{"id":35,"name":"JadeWear UF","short":"Fkr","teacher":"Kristina Farwing","contract":false},{"id":36,"name":"Hjärnjakten UF","short":"Sj","teacher":"Johan Sellgren","contract":false},{"id":37,"name":"BIJOU UF","short":"Sha","teacher":"Abanob Shemon","contract":false},{"id":38,"name":"Deliquacy","short":"By","teacher":"Linda Bylund","contract":false},{"id":39,"name":"GapGuard UF","short":"By","teacher":"Linda Bylund","contract":false}],"bookings":[{"week":40,"slot":1,"companyId":2,"contract":true},{"week":41,"slot":1,"companyId":2,"contract":true},{"week":43,"slot":1,"companyId":39,"contract":false},{"week":46,"slot":1,"companyId":39,"contract":false},{"week":46,"slot":2,"companyId":3,"contract":false},{"week":46,"slot":3,"companyId":11,"contract":false},{"week":47,"slot":1,"companyId":17,"contract":false},{"week":47,"slot":2,"companyId":3,"contract":false},{"week":47,"slot":3,"companyId":11,"contract":false},{"week":48,"slot":1,"companyId":17,"contract":false},{"week":48,"slot":2,"companyId":7,"contract":false},{"week":48,"slot":3,"companyId":26,"contract":false},{"week":49,"slot":1,"companyId":1,"contract":false},{"week":49,"slot":2,"companyId":7,"contract":false},{"week":49,"slot":3,"companyId":26,"contract":false},{"week":50,"slot":1,"companyId":1,"contract":false},{"week":50,"slot":2,"companyId":9,"contract":false},{"week":50,"slot":3,"companyId":29,"contract":false},{"week":51,"slot":1,"companyId":8,"contract":false},{"week":51,"slot":2,"companyId":9,"contract":false},{"week":51,"slot":3,"companyId":18,"contract":false},{"week":3,"slot":3,"companyId":19,"contract":false},{"week":4,"slot":3,"companyId":19,"contract":false},{"week":5,"slot":1,"companyId":21,"contract":false},{"week":5,"slot":2,"companyId":38,"contract":false},{"week":6,"slot":1,"companyId":21,"contract":false},{"week":6,"slot":2,"companyId":38,"contract":false}],"fairs":[{"id":"f1","title":"Invigning Idéverket 26/9","companyIds":[1,2,3,6,5,4,10,9,13,16]},{"id":"f2","title":"Julskyltning 29/11","companyIds":[7,17,2,14,32,13,26,8,29,28,35,36,19,37]}]};
+
+// ---------- Tillstånd ----------
+let state = clone(ORIGINAL);
+let dataSha = null;          // sha för data.json i repot, krävs vid skrivning
+let dataSource = 'inbyggd';  // varifrån aktuell data kom
+let token = null;            // GitHub-token i minnet när man är inloggad
+let authBlob = null;         // krypterad token från auth.json (null = inget lösenord satt)
+let pendingAction = null;    // åtgärd som körs efter lyckad inloggning
+let editBookingState = null, editCompanyId = null, activeFairId = null, confirmAction = null;
+let saveQueue = Promise.resolve();
+let savesInFlight = 0;
+
+const $ = id => document.getElementById(id);
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function canEdit(){ return !!token; }
+
+// ---------- Base64 / UTF-8 ----------
+function bytesToB64(bytes){ let s=''; const u=new Uint8Array(bytes); for(let i=0;i<u.length;i+=0x8000) s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s); }
+function b64ToBytes(b64){ const s=atob(String(b64).replace(/\s+/g,'')); const u=new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; }
+function utf8ToB64(str){ return bytesToB64(new TextEncoder().encode(str)); }
+function b64ToUtf8(b64){ return new TextDecoder().decode(b64ToBytes(b64)); }
+
+// ---------- Kryptering av token (PBKDF2 + AES-GCM) ----------
+async function deriveKey(password, salt, iterations){
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations, hash:'SHA-256'}, km, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function encryptToken(tok, password){
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12)), iterations = 600000;
+  const key = await deriveKey(password, salt, iterations);
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(tok));
+  return {version:1, kdf:'PBKDF2-SHA256', cipher:'AES-256-GCM', iterations, salt:bytesToB64(salt), iv:bytesToB64(iv), data:bytesToB64(ct)};
+}
+async function decryptToken(blob, password){
+  const key = await deriveKey(password, b64ToBytes(blob.salt), blob.iterations);
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64ToBytes(blob.iv)}, key, b64ToBytes(blob.data));
+  return new TextDecoder().decode(pt);
+}
+function looksLikeToken(s){ return /^(github_pat_|ghp_|gho_|ghu_|ghs_)[A-Za-z0-9_]+$/.test(s); }
+
+// ---------- GitHub API ----------
+class ApiError extends Error { constructor(status, message){ super(message); this.status = status; } }
+async function api(path, opts = {}, tok = token){
+  const headers = Object.assign({'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'}, opts.headers || {});
+  if (tok) headers['Authorization'] = 'Bearer ' + tok;
+  if (opts.body) headers['Content-Type'] = 'application/json';
+  const res = await fetch(API + path, Object.assign({}, opts, {headers, cache:'no-store'}));
+  if (res.status === 404 && opts.allow404) return null;
+  if (!res.ok){
+    let msg = res.statusText; try { msg = (await res.json()).message || msg; } catch(e){}
+    throw new ApiError(res.status, msg);
+  }
+  return res.status === 204 ? null : res.json();
+}
+const contentsPath = p => `/repos/${CONFIG.owner}/${CONFIG.repo}/contents/${p}`;
+async function apiReadFile(path, tok = token){
+  const r = await api(contentsPath(path) + `?ref=${encodeURIComponent(CONFIG.branch)}`, {allow404:true}, tok);
+  return r ? {sha:r.sha, text:b64ToUtf8(r.content)} : null;
+}
+async function apiWriteFile(path, text, message, sha, tok = token){
+  const body = {message, content:utf8ToB64(text), branch:CONFIG.branch};
+  if (sha) body.sha = sha;
+  const r = await api(contentsPath(path), {method:'PUT', body:JSON.stringify(body)}, tok);
+  return r.content.sha;
+}
+async function fetchPublicJson(path){
+  // Utan inloggning: läs direkt från repot (uppdateras inom några minuter), annars från GitHub Pages.
+  const tries = [RAW + path + '?_=' + Date.now(), path + '?_=' + Date.now()];
+  let sawNotFound = false;
+  for (const url of tries){
+    try {
+      const res = await fetch(url, {cache:'no-store'});
+      if (res.status === 404){ sawNotFound = true; continue; }
+      if (res.ok) return await res.json();
+    } catch(e){}
+  }
+  if (sawNotFound) return null;
+  throw new Error('Kunde inte hämta ' + path);
+}
+
+// ---------- Ladda data ----------
+function validData(d){ return d && Array.isArray(d.companies) && Array.isArray(d.bookings) && Array.isArray(d.fairs); }
+function normalize(d){
+  d.version = 2;
+  if (typeof d.storeCode !== 'string') d.storeCode = String(d.storeCode ?? '');
+  d.bookings.forEach(b => { if (typeof b.contract !== 'boolean'){ const c = d.companies.find(x => x.id === b.companyId); b.contract = !!(c && c.contract); } });
+  return d;
+}
+async function loadData({quiet = false} = {}){
+  try {
+    let d;
+    if (token){
+      const f = await apiReadFile(CONFIG.dataPath);
+      if (!f){ dataSha = null; d = clone(ORIGINAL); dataSource = 'inbyggd'; }
+      else { dataSha = f.sha; d = JSON.parse(f.text); dataSource = 'GitHub (API)'; }
+    } else {
+      d = await fetchPublicJson(CONFIG.dataPath);
+      if (!d){ d = clone(ORIGINAL); dataSource = 'inbyggd'; } else dataSource = 'GitHub'; 
+    }
+    if (!validData(d)) throw new Error('Ogiltigt dataformat');
+    const changed = JSON.stringify(d) !== JSON.stringify(state);
+    state = normalize(d);
+    if (changed || !quiet) renderAll();
+    if (!quiet) showNotice(null);
+    return true;
+  } catch(e){
+    if (e instanceof ApiError && e.status === 401){ handleBadToken(); return false; }
+    if (!quiet) showNotice('warn', 'Kunde inte hämta aktuell data från GitHub (' + e.message + '). Visar senast kända innehåll.');
+    return false;
+  }
+}
+async function loadAuth(){
+  try { authBlob = await fetchPublicJson(CONFIG.authPath); }
+  catch(e){ /* behåll tidigare värde */ }
+  if (authBlob && !(authBlob.salt && authBlob.iv && authBlob.data)) authBlob = null;
+  renderAuthUI();
+}
+
+// ---------- Spara ----------
+function persist(message){
+  renderAll();
+  if (!token){ showStatus('error', 'Du är inte inloggad. Ändringen sparades inte.'); return; }
+  const snapshot = JSON.stringify(state, null, 2) + '\n';
+  savesInFlight++; showStatus('busy', 'Sparar…');
+  saveQueue = saveQueue.then(async () => {
+    try {
+      if (!dataSha){ const f = await apiReadFile(CONFIG.dataPath); dataSha = f ? f.sha : null; }
+      dataSha = await apiWriteFile(CONFIG.dataPath, snapshot, message || 'Uppdatera bokningar', dataSha);
+      if (--savesInFlight === 0) showStatus('ok', 'Sparat');
+    } catch(e){
+      savesInFlight = 0;
+      if (e instanceof ApiError && (e.status === 409 || e.status === 422)){
+        dataSha = null;
+        await loadData({quiet:true});
+        showStatus('error', 'Någon annan ändrade samtidigt. Sidan är uppdaterad med senaste versionen, gör om din ändring.', 9000);
+      } else if (e instanceof ApiError && e.status === 401){
+        showStatus('error', 'Kunde inte spara: inloggningen gäller inte längre.', 9000);
+        handleBadToken();
+      } else {
+        showStatus('error', 'Kunde inte spara: ' + e.message, 9000);
+      }
+    }
+  });
+}
+window.addEventListener('beforeunload', e => { if (savesInFlight > 0){ e.preventDefault(); e.returnValue = ''; } });
+
+// ---------- Inloggning ----------
+function storedToken(){ try { return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY); } catch(e){ return null; } }
+function storeToken(tok, remember){ try { sessionStorage.removeItem(TOKEN_KEY); localStorage.removeItem(TOKEN_KEY); (remember ? localStorage : sessionStorage).setItem(TOKEN_KEY, tok); } catch(e){} }
+function clearToken(){ try { sessionStorage.removeItem(TOKEN_KEY); localStorage.removeItem(TOKEN_KEY); } catch(e){} }
+function handleBadToken(){ token = null; clearToken(); dataSha = null; renderAuthUI(); renderAll(); showNotice('error', 'Inloggningen gäller inte längre (token är ogiltig eller har gått ut). Logga in igen.'); loadData({quiet:true}); }
+async function login(tok, remember){
+  const f = await apiReadFile(CONFIG.dataPath, tok); // kontrollerar att token fungerar mot repot
+  token = tok; storeToken(tok, remember);
+  if (f){ dataSha = f.sha; const d = JSON.parse(f.text); if (validData(d)) { state = normalize(d); dataSource = 'GitHub (API)'; } }
+  showNotice(null); renderAuthUI(); renderAll();
+}
+function logout(){ token = null; clearToken(); dataSha = null; renderAuthUI(); renderAll(); showStatus('ok', 'Utloggad'); }
+function requireEdit(fn){
+  if (canEdit()) return fn();
+  pendingAction = fn; openLogin();
+}
+function openLogin(){
+  $('loginError').textContent = ''; $('loginSecret').value = '';
+  if (authBlob){
+    $('loginSecretLabel').textContent = 'Redigeringslösenord';
+    $('loginIntro').textContent = 'Ange redigeringslösenordet du fått av ansvarig för bokningen. Utan lösenord kan du bara titta.';
+  } else {
+    $('loginSecretLabel').textContent = 'GitHub-token';
+    $('loginIntro').textContent = 'Inget redigeringslösenord är satt ännu. Klistra in en GitHub-token med skrivrätt till repot för att logga in, och sätt sedan ett lösenord under Inställningar.';
+  }
+  $('loginDialog').showModal(); $('loginSecret').focus();
+}
+$('loginForm').onsubmit = async e => {
+  e.preventDefault();
+  const secret = $('loginSecret').value.trim(), remember = $('loginRemember').checked, btn = $('loginSubmit');
+  if (!secret) return;
+  btn.disabled = true; $('loginError').textContent = '';
+  try {
+    let tok;
+    if (looksLikeToken(secret)) tok = secret;
+    else if (authBlob){ try { tok = await decryptToken(authBlob, secret); } catch(err){ throw new Error('Fel lösenord.'); } }
+    else throw new Error('Det finns inget lösenord ännu. Klistra in en GitHub-token.');
+    await login(tok, remember);
+    $('loginDialog').close();
+    const fn = pendingAction; pendingAction = null; if (fn) fn();
+  } catch(err){
+    $('loginError').textContent = err instanceof ApiError ? (err.status === 401 ? 'Token är ogiltig eller har gått ut.' : 'GitHub svarade: ' + err.message) : err.message;
+  } finally { btn.disabled = false; }
+};
+$('loginDialog').addEventListener('close', () => { pendingAction = null; });
+
+// ---------- Sätt lösenord ----------
+$('setPasswordBtn').onclick = () => { $('pwError').textContent = ''; $('pwToken').value = token || ''; $('pwNew').value = ''; $('pwRepeat').value = ''; $('passwordDialog').showModal(); };
+$('passwordForm').onsubmit = async e => {
+  e.preventDefault();
+  const tok = $('pwToken').value.trim(), pw = $('pwNew').value, rep = $('pwRepeat').value, btn = $('pwSubmit');
+  $('pwError').textContent = '';
+  if (!looksLikeToken(tok)) return $('pwError').textContent = 'Klistra in en giltig GitHub-token (börjar med github_pat_ eller ghp_).';
+  if (pw.length < 12) return $('pwError').textContent = 'Lösenordet måste vara minst 12 tecken. En mening eller fras fungerar bra.';
+  if (pw !== rep) return $('pwError').textContent = 'Lösenorden stämmer inte överens.';
+  btn.disabled = true;
+  try {
+    const existing = await apiReadFile(CONFIG.authPath, tok);
+    const blob = await encryptToken(tok, pw);
+    await apiWriteFile(CONFIG.authPath, JSON.stringify(blob, null, 2) + '\n', 'Uppdatera redigeringslösenord', existing ? existing.sha : null, tok);
+    authBlob = blob;
+    if (!token) await login(tok, false);
+    $('passwordDialog').close(); renderAuthUI();
+    showStatus('ok', 'Redigeringslösenordet är sparat', 5000);
+  } catch(err){
+    $('pwError').textContent = err instanceof ApiError ? (err.status === 401 ? 'Token är ogiltig eller har gått ut.' : err.status === 403 || err.status === 404 ? 'Token saknar skrivrätt till repot (Contents: läs och skriv).' : 'GitHub svarade: ' + err.message) : err.message;
+  } finally { btn.disabled = false; }
+};
+
+// ---------- UI-hjälp ----------
+let statusTimer = null;
+function showStatus(kind, text, ms){
+  const el = $('saveStatus'); el.textContent = text; el.className = 'show ' + (kind === 'busy' ? '' : kind);
+  clearTimeout(statusTimer);
+  if (kind !== 'busy') statusTimer = setTimeout(() => el.classList.remove('show'), ms || 2500);
+}
+function showNotice(kind, text){
+  const el = $('notice');
+  if (!kind){ el.className = 'notice hidden'; el.textContent = ''; return; }
+  el.className = 'notice ' + kind; el.textContent = text;
+}
+function askConfirm(title, text, okText = 'Ta bort'){
+  $('confirmTitle').textContent = title; $('confirmText').textContent = text; $('confirmOk').textContent = okText;
+  $('confirmDialog').showModal();
+  return new Promise(resolve => { confirmAction = resolve; });
+}
+$('confirmCancel').onclick = () => { $('confirmDialog').close(); if (confirmAction) confirmAction(false); confirmAction = null; };
+$('confirmOk').onclick = () => { $('confirmDialog').close(); if (confirmAction) confirmAction(true); confirmAction = null; };
+function anyDialogOpen(){ return !!document.querySelector('dialog[open]'); }
+
+function renderAuthUI(){
+  const edit = canEdit();
+  document.body.classList.toggle('canedit', edit);
+  $('authWho').textContent = edit ? 'Inloggad för redigering' : 'Visningsläge';
+  $('authBtn').textContent = edit ? 'Logga ut' : 'Logga in för att redigera';
+  $('codeInput').readOnly = !edit;
+  $('logoutBtn').classList.toggle('hidden', !edit);
+  $('bookingsHint').textContent = edit ? 'Klicka på en plats för att boka eller ändra företag' : 'Logga in för att boka eller ändra. Som besökare kan du bara titta.';
+  $('authInfo').textContent = authBlob ? 'Ett redigeringslösenord är satt. Byt det genom att ange GitHub-token och ett nytt lösenord.' : 'Inget redigeringslösenord är satt ännu.';
+  $('storageInfo').textContent = `Repo: ${CONFIG.owner}/${CONFIG.repo} (gren ${CONFIG.branch}). Data hämtad från: ${dataSource}.`;
+  $('repoLink').href = `https://github.com/${CONFIG.owner}/${CONFIG.repo}`;
+}
+$('authBtn').onclick = () => canEdit() ? logout() : openLogin();
+$('logoutBtn').onclick = logout;
+$('refreshBtn').onclick = async () => { showStatus('busy', 'Hämtar…'); const ok = await loadData(); renderAuthUI(); showStatus(ok ? 'ok' : 'error', ok ? 'Uppdaterad' : 'Kunde inte hämta'); };
+
+// ---------- Domänlogik ----------
+function isoWeek(d = new Date()){ const x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); x.setUTCDate(x.getUTCDate() + 4 - (x.getUTCDay() || 7)); const y = new Date(Date.UTC(x.getUTCFullYear(), 0, 1)); return Math.ceil((((x - y) / 86400000) + 1) / 7); }
+function company(id){ return state.companies.find(c => c.id === Number(id)); }
+function booking(w, s){ return state.bookings.find(b => b.week === Number(w) && b.slot === Number(s)); }
+function countFor(id){ return state.bookings.filter(b => b.companyId === id).length; }
+function weeks(){ return [...Array.from({length:19}, (_, i) => 34 + i), ...Array.from({length:23}, (_, i) => i + 1)]; }
+function status(b){ return b && b.contract ? '<span class="status ok">✓ Signerat</span>' : '<span class="status no">! Ej signerat</span>'; }
+function companyOptions(selected = '', exclude = []){ return '<option value="">Välj företag</option>' + state.companies.filter(c => !exclude.includes(c.id)).map(c => `<option value="${c.id}" ${c.id === Number(selected) ? 'selected' : ''}>${c.id}. ${esc(c.name)}</option>`).join(''); }
+
+function renderAll(){ renderDashboard(); renderCalendar(); renderCompanies(); renderFairs(); if (document.activeElement !== $('codeInput')) $('codeInput').value = state.storeCode || ''; }
+function renderDashboard(){
+  const w = isoWeek(), active = new Set(state.bookings.map(b => b.companyId)).size;
+  $('kpis').innerHTML = [['Bokningar', state.bookings.length], ['Bokade företag', active], ['UF-företag', state.companies.length]].map(x => `<div class="card kpi"><small>${x[0]}</small><strong>${x[1]}</strong></div>`).join('');
+  $('todayLabel').textContent = `Vecka ${w}`;
+  const wanted = [w, w + 1, w + 2, w + 3].map(n => n > 52 ? n - 52 : n);
+  $('weekCards').innerHTML = wanted.map((wk, i) => `<article class="card weekcard"><h3>${i ? 'Kommande, vecka' : 'Aktuellt, vecka'} ${wk}</h3>${[1,2,3,4].map(s => { const b = booking(wk, s), c = b && company(b.companyId); return `<div class="slot"><span class="slotnum">${s}</span><div>${c ? `<strong>${esc(c.name)}</strong><div class="muted">${esc(c.teacher)}</div>` : '<span class="muted">Ingen bokning</span>'}</div>${c ? status(b) : ''}</div>`; }).join('')}</article>`).join('');
+}
+function renderCalendar(){
+  const filter = Number($('weekFilter').value) || 0, list = filter ? [filter] : weeks(), edit = canEdit();
+  $('calendar').innerHTML = list.map(w => `<div class="weekrow"><div class="weeklabel">Vecka ${w}</div>${[1,2,3,4].map(s => { const b = booking(w, s), c = b && company(b.companyId); return `<div class="booking ${b ? '' : 'empty'}" data-week="${w}" data-slot="${s}">${c ? `<div class="name">${esc(c.name)}</div><div class="teacher">${esc(c.teacher)}</div><div style="margin-top:6px">${status(b)}</div>` : (edit ? '+ Lägg till' : 'Ledig')}</div>`; }).join('')}</div>`).join('');
+  document.querySelectorAll('.booking').forEach(el => el.onclick = () => requireEdit(() => openBooking(Number(el.dataset.week), Number(el.dataset.slot))));
+}
+function renderCompanies(){
+  const q = $('companySearch').value.toLowerCase(), edit = canEdit();
+  $('companyRows').innerHTML = state.companies.filter(c => (c.name + ' ' + c.teacher).toLowerCase().includes(q)).map(c => `<tr><td>${c.id}</td><td><strong>${esc(c.name)}</strong></td><td>${esc(c.teacher)}</td><td class="count">${countFor(c.id)}</td>${edit ? `<td><div class="toolbar"><button class="btn secondary small" data-edit-company="${c.id}">Redigera</button><button class="btn danger small" data-delete-company="${c.id}">Ta bort</button></div></td>` : ''}</tr>`).join('');
+  document.querySelectorAll('[data-delete-company]').forEach(x => x.onclick = () => deleteCompany(Number(x.dataset.deleteCompany)));
+  document.querySelectorAll('[data-edit-company]').forEach(x => x.onclick = () => openCompany(Number(x.dataset.editCompany)));
+}
+function renderFairs(){
+  const edit = canEdit();
+  $('fairGrid').innerHTML = state.fairs.length ? state.fairs.map(f => `<article class="card"><div class="fairtop"><div><h3>${esc(f.title)}</h3><span class="badge">${f.companyIds.length} företag</span></div>${edit ? `<div class="toolbar"><button class="btn small" data-add-fair="${f.id}">+ Lägg till</button><button class="btn secondary small" data-delete-fair="${f.id}">Ta bort</button></div>` : ''}</div><ul class="fairlist">${f.companyIds.length ? f.companyIds.map(id => { const c = company(id); return c ? `<li><span><span class="badge">${id}</span> ${esc(c.name)}</span>${edit ? `<button class="btn secondary small" data-remove-fair="${f.id}" data-company="${id}">Ta bort</button>` : ''}</li>` : ''; }).join('') : '<li class="muted">Inga företag tillagda ännu.</li>'}</ul></article>`).join('') : '<div class="emptymsg">Inga mässtillfällen skapade.</div>';
+  document.querySelectorAll('[data-add-fair]').forEach(x => x.onclick = () => openFairCompany(x.dataset.addFair));
+  document.querySelectorAll('[data-delete-fair]').forEach(x => x.onclick = async () => { const f = state.fairs.find(f => f.id === x.dataset.deleteFair); if (await askConfirm('Ta bort mässtillfälle?', `Ta bort ${f?.title || 'mässtillfället'} och dess företagslista?`)){ state.fairs = state.fairs.filter(f => f.id !== x.dataset.deleteFair); persist(`Ta bort mässtillfälle: ${f?.title || ''}`); } });
+  document.querySelectorAll('[data-remove-fair]').forEach(x => x.onclick = () => { const f = state.fairs.find(f => f.id === x.dataset.removeFair), c = company(x.dataset.company); f.companyIds = f.companyIds.filter(id => id !== Number(x.dataset.company)); persist(`Ta bort ${c?.name || 'företag'} från ${f.title}`); });
+}
+async function deleteCompany(id){
+  const c = company(id); if (!c) return;
+  const bookings = countFor(id), fairs = state.fairs.filter(f => f.companyIds.includes(id)).length;
+  const details = (bookings || fairs) ? ` Företaget finns i ${bookings} bokning(ar) och ${fairs} mässtillfälle(n). Dessa kopplingar tas också bort.` : '';
+  if (!await askConfirm('Ta bort UF-företag?', `Ta bort ${c.name}?${details}`)) return;
+  state.companies = state.companies.filter(x => x.id !== id);
+  state.bookings = state.bookings.filter(b => b.companyId !== id);
+  state.fairs.forEach(f => f.companyIds = f.companyIds.filter(x => x !== id));
+  persist(`Ta bort företag: ${c.name}`);
+}
+function openBooking(w, s){
+  editBookingState = {w, s}; const b = booking(w, s);
+  $('bookingTitle').textContent = `Vecka ${w}, plats ${s}`;
+  $('bookingCompany').innerHTML = companyOptions(b?.companyId);
+  $('bookingContract').checked = !!b?.contract;
+  $('deleteBooking').style.display = b ? 'inline-block' : 'none';
+  $('bookingDialog').showModal();
+}
+function openCompany(id = null){
+  editCompanyId = id; const c = id ? company(id) : null;
+  $('companyTitle').textContent = c ? 'Redigera företag' : 'Lägg till företag';
+  $('companyName').value = c?.name || ''; $('companyTeacher').value = c?.teacher || '';
+  $('companyDialog').showModal();
+}
+function openFairCompany(id){
+  activeFairId = id; const f = state.fairs.find(x => x.id === id);
+  $('fairCompanyTitle').textContent = `Lägg till i ${f.title}`;
+  $('fairCompanySelect').innerHTML = companyOptions('', f.companyIds);
+  $('fairCompanyDialog').showModal();
+}
+
+// ---------- Händelser ----------
+document.querySelectorAll('.nav button').forEach(b => b.onclick = () => { document.querySelectorAll('.nav button,.view').forEach(x => x.classList.remove('active')); b.classList.add('active'); $(b.dataset.view).classList.add('active'); });
+document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => $(b.dataset.close).close());
+const wf = $('weekFilter'); wf.innerHTML = '<option value="0">Alla veckor</option>' + weeks().map(w => `<option value="${w}">Vecka ${w}</option>`).join(''); wf.onchange = renderCalendar;
+$('companySearch').oninput = renderCompanies;
+$('codeInput').onclick = () => { if (!canEdit()) openLogin(); };
+$('codeInput').onchange = e => { if (!canEdit()) return; const v = e.target.value.trim(); if (v === state.storeCode) return; state.storeCode = v; persist(`Ändra butikskod till ${v}`); };
+$('saveBooking').onclick = () => {
+  const id = Number($('bookingCompany').value); if (!id) return alert('Välj ett UF-företag.');
+  state.bookings = state.bookings.filter(b => !(b.week === editBookingState.w && b.slot === editBookingState.s));
+  state.bookings.push({week:editBookingState.w, slot:editBookingState.s, companyId:id, contract:$('bookingContract').checked});
+  $('bookingDialog').close(); persist(`Boka vecka ${editBookingState.w} plats ${editBookingState.s}: ${company(id)?.name || id}`);
+};
+$('deleteBooking').onclick = () => { state.bookings = state.bookings.filter(b => !(b.week === editBookingState.w && b.slot === editBookingState.s)); $('bookingDialog').close(); persist(`Ta bort bokning vecka ${editBookingState.w} plats ${editBookingState.s}`); };
+$('addCompanyBtn').onclick = () => requireEdit(() => openCompany());
+$('saveCompany').onclick = () => {
+  const name = $('companyName').value.trim(), teacher = $('companyTeacher').value.trim(); if (!name) return alert('Ange företagets namn.');
+  if (editCompanyId){ Object.assign(company(editCompanyId), {name, teacher}); } else { const id = Math.max(0, ...state.companies.map(c => c.id)) + 1; state.companies.push({id, name, short:'', teacher, contract:false}); }
+  $('companyDialog').close(); persist(`${editCompanyId ? 'Redigera' : 'Lägg till'} företag: ${name}`);
+};
+$('addFairBtn').onclick = () => requireEdit(() => { $('fairTitle').value = ''; $('fairDialog').showModal(); });
+$('saveFair').onclick = () => { const title = $('fairTitle').value.trim(); if (!title) return alert('Ange namn eller datum.'); state.fairs.push({id:'f' + Date.now(), title, companyIds:[]}); $('fairDialog').close(); persist(`Nytt mässtillfälle: ${title}`); };
+$('saveFairCompany').onclick = () => { const id = Number($('fairCompanySelect').value); if (!id) return alert('Välj ett UF-företag.'); const f = state.fairs.find(x => x.id === activeFairId); if (!f.companyIds.includes(id)) f.companyIds.push(id); $('fairCompanyDialog').close(); persist(`Lägg till ${company(id)?.name || id} i ${f.title}`); };
+$('exportBtn').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], {type:'application/json'})); a.download = 'Bokning_IdeVerket_sakerhetskopia.json'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000); };
+$('importFile').onchange = async e => {
+  const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+  try { const d = JSON.parse(await file.text()); if (!validData(d)) throw Error(); if (!await askConfirm('Importera data?', 'All nuvarande data ersätts med innehållet i filen.', 'Importera')) return; state = normalize(d); persist('Importera säkerhetskopia'); }
+  catch(err){ alert('Filen kunde inte läsas.'); }
+};
+$('resetBtn').onclick = () => requireEdit(async () => { if (await askConfirm('Återställ allt?', 'Alla bokningar och ändringar återställs till ursprungsläget från Excel-filen.', 'Återställ')){ state = clone(ORIGINAL); persist('Återställ till ursprungsdata'); } });
+
+// Hämta nya ändringar från andra användare med jämna mellanrum.
+setInterval(() => { if (document.visibilityState === 'visible' && !anyDialogOpen() && savesInFlight === 0) loadData({quiet:true}); }, CONFIG.pollSeconds * 1000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && !anyDialogOpen() && savesInFlight === 0) loadData({quiet:true}); });
+
+// ---------- Start ----------
+(async function init(){
+  renderAuthUI(); renderAll();
+  const saved = storedToken();
+  if (saved){ try { await login(saved, !!localStorage.getItem(TOKEN_KEY)); } catch(e){ clearToken(); token = null; } }
+  await Promise.all([loadData(), loadAuth()]);
+  renderAuthUI();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+{
+  "version": 2,
+  "storeCode": "1965",
+  "companies": [
+    {
+      "id": 1,
+      "name": "PlaceIt UF",
+      "short": "Bem",
+      "teacher": "Martin Berggren",
+      "contract": false
+    },
+    {
+      "id": 2,
+      "name": "ScentCase UF",
+      "short": "Bnm",
+      "teacher": "Martina Benne",
+      "contract": true
+    },
+    {
+      "id": 3,
+      "name": "Din Röst UF",
+      "short": "Bem",
+      "teacher": "Martin Berggren",
+      "contract": false
+    },
+    {
+      "id": 4,
+      "name": "HomeDesign UF",
+      "short": "Bem",
+      "teacher": "Martin Berggren",
+      "contract": false
+    },
+    {
+      "id": 5,
+      "name": "Tillsammans UF",
+      "short": "Bem",
+      "teacher": "Martin Berggren",
+      "contract": false
+    },
+    {
+      "id": 6,
+      "name": "Resellio UF",
+      "short": "Ddf",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
+    },
+    {
+      "id": 7,
+      "name": "Whristy UF",
+      "short": "Bnm",
+      "teacher": "Martina Benne",
+      "contract": false
+    },
+    {
+      "id": 8,
+      "name": "GameOn UF",
+      "short": "Ddf",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
+    },
+    {
+      "id": 9,
+      "name": "Néhlia UF",
+      "short": "Ddf",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
+    },
+    {
+      "id": 10,
+      "name": "Språkverkstaden UF",
+      "short": "By",
+      "teacher": "Linda Bylund",
+      "contract": false
+    },
+    {
+      "id": 11,
+      "name": "GearDry UF",
+      "short": "Fkr",
+      "teacher": "Kristina Farwing",
+      "contract": false
+    },
+    {
+      "id": 12,
+      "name": "Gråzon UF",
+      "short": "Fkr",
+      "teacher": "Kristina Farwing",
+      "contract": false
+    },
+    {
+      "id": 13,
+      "name": "HeatHold UF",
+      "short": "Fkr",
+      "teacher": "Kristina Farwing",
+      "contract": false
+    },
+    {
+      "id": 14,
+      "name": "Riflesso UF",
+      "short": "Fkr",
+      "teacher": "Kristina Farwing",
+      "contract": false
+    },
+    {
+      "id": 15,
+      "name": "Keyity UF",
+      "short": "Bnm",
+      "teacher": "Martina Benne",
+      "contract": false
+    },
+    {
+      "id": 16,
+      "name": "Strålagrönt UF",
+      "short": "By",
+      "teacher": "Linda Bylund",
+      "contract": false
+    },
+    {
+      "id": 17,
+      "name": "Träform UF",
+      "short": "By",
+      "teacher": "Linda Bylund",
+      "contract": false
+    },
+    {
+      "id": 18,
+      "name": "Clean Buds UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 19,
+      "name": "Eliora UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 20,
+      "name": "Findify UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 21,
+      "name": "Griply UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 22,
+      "name": "KMA UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 23,
+      "name": "Nortivo UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 24,
+      "name": "Pop-up UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 25,
+      "name": "Smålandskampen UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 26,
+      "name": "TrackPro UF",
+      "short": "Sha",
+      "teacher": "Abanob Shemon",
+      "contract": false
+    },
+    {
+      "id": 27,
+      "name": "Diodia UF",
+      "short": "Sha",
+      "teacher": "Abanob Shemon",
+      "contract": false
+    },
+    {
+      "id": 28,
+      "name": "Saveur UF",
+      "short": "Sha",
+      "teacher": "Abanob Shemon",
+      "contract": false
+    },
+    {
+      "id": 29,
+      "name": "Almora UF",
+      "short": "Ddf",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
+    },
+    {
+      "id": 30,
+      "name": "Candlelit UF",
+      "short": "Ddf",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
+    },
+    {
+      "id": 31,
+      "name": "SetWiew UF",
+      "short": "Ddf",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
+    },
+    {
+      "id": 32,
+      "name": "Säg Det UF",
+      "short": "Fkr",
+      "teacher": "Kristina Farwing",
+      "contract": false
+    },
+    {
+      "id": 33,
+      "name": "Trasslo UF",
+      "short": "Bem",
+      "teacher": "Martin Berggren",
+      "contract": false
+    },
+    {
+      "id": 34,
+      "name": "CleanDrive UF",
+      "short": "Bem",
+      "teacher": "Martin Berggren",
+      "contract": false
+    },
+    {
+      "id": 35,
+      "name": "JadeWear UF",
+      "short": "Fkr",
+      "teacher": "Kristina Farwing",
+      "contract": false
+    },
+    {
+      "id": 36,
+      "name": "Hjärnjakten UF",
+      "short": "Sj",
+      "teacher": "Johan Sellgren",
+      "contract": false
+    },
+    {
+      "id": 37,
+      "name": "BIJOU UF",
+      "short": "Sha",
+      "teacher": "Abanob Shemon",
+      "contract": false
+    },
+    {
+      "id": 38,
+      "name": "Deliquacy",
+      "short": "By",
+      "teacher": "Linda Bylund",
+      "contract": false
+    },
+    {
+      "id": 39,
+      "name": "GapGuard UF",
+      "short": "By",
+      "teacher": "Linda Bylund",
+      "contract": false
+    }
+  ],
+  "bookings": [
+    {
+      "week": 40,
+      "slot": 1,
+      "companyId": 2,
+      "contract": true
+    },
+    {
+      "week": 41,
+      "slot": 1,
+      "companyId": 2,
+      "contract": true
+    },
+    {
+      "week": 43,
+      "slot": 1,
+      "companyId": 39,
+      "contract": false
+    },
+    {
+      "week": 46,
+      "slot": 1,
+      "companyId": 39,
+      "contract": false
+    },
+    {
+      "week": 46,
+      "slot": 2,
+      "companyId": 3,
+      "contract": false
+    },
+    {
+      "week": 46,
+      "slot": 3,
+      "companyId": 11,
+      "contract": false
+    },
+    {
+      "week": 47,
+      "slot": 1,
+      "companyId": 17,
+      "contract": false
+    },
+    {
+      "week": 47,
+      "slot": 2,
+      "companyId": 3,
+      "contract": false
+    },
+    {
+      "week": 47,
+      "slot": 3,
+      "companyId": 11,
+      "contract": false
+    },
+    {
+      "week": 48,
+      "slot": 1,
+      "companyId": 17,
+      "contract": false
+    },
+    {
+      "week": 48,
+      "slot": 2,
+      "companyId": 7,
+      "contract": false
+    },
+    {
+      "week": 48,
+      "slot": 3,
+      "companyId": 26,
+      "contract": false
+    },
+    {
+      "week": 49,
+      "slot": 1,
+      "companyId": 1,
+      "contract": false
+    },
+    {
+      "week": 49,
+      "slot": 2,
+      "companyId": 7,
+      "contract": false
+    },
+    {
+      "week": 49,
+      "slot": 3,
+      "companyId": 26,
+      "contract": false
+    },
+    {
+      "week": 50,
+      "slot": 1,
+      "companyId": 1,
+      "contract": false
+    },
+    {
+      "week": 50,
+      "slot": 2,
+      "companyId": 9,
+      "contract": false
+    },
+    {
+      "week": 50,
+      "slot": 3,
+      "companyId": 29,
+      "contract": false
+    },
+    {
+      "week": 51,
+      "slot": 1,
+      "companyId": 8,
+      "contract": false
+    },
+    {
+      "week": 51,
+      "slot": 2,
+      "companyId": 9,
+      "contract": false
+    },
+    {
+      "week": 51,
+      "slot": 3,
+      "companyId": 18,
+      "contract": false
+    },
+    {
+      "week": 3,
+      "slot": 3,
+      "companyId": 19,
+      "contract": false
+    },
+    {
+      "week": 4,
+      "slot": 3,
+      "companyId": 19,
+      "contract": false
+    },
+    {
+      "week": 5,
+      "slot": 1,
+      "companyId": 21,
+      "contract": false
+    },
+    {
+      "week": 5,
+      "slot": 2,
+      "companyId": 38,
+      "contract": false
+    },
+    {
+      "week": 6,
+      "slot": 1,
+      "companyId": 21,
+      "contract": false
+    },
+    {
+      "week": 6,
+      "slot": 2,
+      "companyId": 38,
+      "contract": false
+    }
+  ],
+  "fairs": [
+    {
+      "id": "f1",
+      "title": "Invigning Idéverket 26/9",
+      "companyIds": [
+        1,
+        2,
+        3,
+        6,
+        5,
+        4,
+        10,
+        9,
+        13,
+        16
+      ]
+    },
+    {
+      "id": "f2",
+      "title": "Julskyltning 29/11",
+      "companyIds": [
+        7,
+        17,
+        2,
+        14,
+        32,
+        13,
+        26,
+        8,
+        29,
+        28,
+        35,
+        36,
+        19,
+        37
+      ]
+    }
+  ]
+}
