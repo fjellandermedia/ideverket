@@ -441,12 +441,6 @@
     },
     {
       "week": 42,
-      "slot": 2,
-      "companyId": 11,
-      "contract": true
-    },
-    {
-      "week": 42,
       "slot": 3,
       "companyId": 1,
       "contract": false
