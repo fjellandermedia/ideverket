@@ -499,7 +499,7 @@
       "week": 44,
       "slot": 3,
       "companyId": 17,
-      "contract": false
+      "contract": true
     }
   ],
   "fairs": [
