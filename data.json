@@ -288,6 +288,13 @@
       "short": "",
       "teacher": "Linda Bylund",
       "contract": false
+    },
+    {
+      "id": 42,
+      "name": "Nyttoform UF",
+      "short": "",
+      "teacher": "Martina Benne",
+      "contract": false
     }
   ],
   "bookings": [
