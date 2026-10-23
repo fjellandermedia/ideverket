@@ -295,6 +295,13 @@
       "short": "",
       "teacher": "Martina Benne",
       "contract": false
+    },
+    {
+      "id": 43,
+      "name": "Tänk 3D",
+      "short": "",
+      "teacher": "Linda Bylund",
+      "contract": false
     }
   ],
   "bookings": [
