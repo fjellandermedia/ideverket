@@ -302,6 +302,13 @@
       "short": "",
       "teacher": "Linda Bylund",
       "contract": false
+    },
+    {
+      "id": 44,
+      "name": "Festdosan UF",
+      "short": "",
+      "teacher": "Frida Diener Dahlstrand",
+      "contract": false
     }
   ],
   "bookings": [
