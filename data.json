@@ -316,6 +316,13 @@
       "short": "",
       "teacher": "Martina Benne",
       "contract": false
+    },
+    {
+      "id": 46,
+      "name": "Påsklov",
+      "short": "",
+      "teacher": "",
+      "contract": false
     }
   ],
   "bookings": [
