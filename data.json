@@ -330,6 +330,13 @@
       "short": "",
       "teacher": "",
       "contract": false
+    },
+    {
+      "id": 48,
+      "name": "Your T-shirt UF",
+      "short": "",
+      "teacher": "Fkr",
+      "contract": false
     }
   ],
   "bookings": [
