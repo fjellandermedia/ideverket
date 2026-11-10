@@ -309,6 +309,13 @@
       "short": "",
       "teacher": "Frida Diener Dahlstrand",
       "contract": false
+    },
+    {
+      "id": 45,
+      "name": "Sportlov",
+      "short": "",
+      "teacher": "Martina Benne",
+      "contract": false
     }
   ],
   "bookings": [
