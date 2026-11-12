@@ -674,6 +674,12 @@
       "slot": 4,
       "companyId": 36,
       "contract": false
+    },
+    {
+      "week": 6,
+      "slot": 3,
+      "companyId": 36,
+      "contract": false
     }
   ],
   "fairs": [
