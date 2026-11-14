@@ -736,7 +736,9 @@
     {
       "id": "f1794663702791",
       "title": "Vårmässa Idéverket 24/4 10-15 (15 företag)",
-      "companyIds": []
+      "companyIds": [
+        42
+      ]
     }
   ]
 }
