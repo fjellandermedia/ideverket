@@ -347,12 +347,6 @@
     },
     {
       "week": 48,
-      "slot": 1,
-      "companyId": 17,
-      "contract": false
-    },
-    {
-      "week": 48,
       "slot": 3,
       "companyId": 26,
       "contract": false
@@ -689,6 +683,12 @@
     },
     {
       "week": 47,
+      "slot": 1,
+      "companyId": 17,
+      "contract": true
+    },
+    {
+      "week": 48,
       "slot": 1,
       "companyId": 17,
       "contract": true
