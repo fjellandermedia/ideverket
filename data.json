@@ -504,12 +504,6 @@
       "contract": true
     },
     {
-      "week": 48,
-      "slot": 4,
-      "companyId": 43,
-      "contract": false
-    },
-    {
       "week": 8,
       "slot": 2,
       "companyId": 44,
@@ -757,6 +751,12 @@
     },
     {
       "week": 47,
+      "slot": 4,
+      "companyId": 43,
+      "contract": true
+    },
+    {
+      "week": 48,
       "slot": 4,
       "companyId": 43,
       "contract": true
