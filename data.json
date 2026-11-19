@@ -337,6 +337,13 @@
       "short": "",
       "teacher": "Abanob Shemon",
       "contract": false
+    },
+    {
+      "id": 49,
+      "name": "Distress UF",
+      "short": "",
+      "teacher": "Linda Bylund",
+      "contract": false
     }
   ],
   "bookings": [
