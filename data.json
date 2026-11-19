@@ -330,6 +330,13 @@
       "short": "",
       "teacher": "",
       "contract": false
+    },
+    {
+      "id": 48,
+      "name": "Scarfé UF",
+      "short": "",
+      "teacher": "Abanob Shemon",
+      "contract": false
     }
   ],
   "bookings": [
