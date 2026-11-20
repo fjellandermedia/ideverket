@@ -781,12 +781,6 @@
       "contract": true
     },
     {
-      "week": 10,
-      "slot": 4,
-      "companyId": 43,
-      "contract": false
-    },
-    {
       "week": 11,
       "slot": 4,
       "companyId": 35,
