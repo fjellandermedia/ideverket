@@ -803,6 +803,12 @@
       "slot": 1,
       "companyId": 13,
       "contract": false
+    },
+    {
+      "week": 14,
+      "slot": 2,
+      "companyId": 12,
+      "contract": false
     }
   ],
   "fairs": [
